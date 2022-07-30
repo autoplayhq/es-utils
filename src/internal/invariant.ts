@@ -135,9 +135,13 @@ export function invariantT(
  * }
  * ```
  */
-export function invariantUnreachable(x: never): never {
+export function invariantUnreachable(
+  x: never,
+  message: AllowedMessageTypes
+): never {
   invariantThrow(
-    "invariantUnreachable encountered value which was supposed to be never",
+    "invariantUnreachable encountered value which was supposed to be never" +
+      optionalMessageSuffix(message),
     x
   );
 }
