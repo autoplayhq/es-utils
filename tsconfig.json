@@ -5,6 +5,7 @@
     "importHelpers": true,
     "declaration": true,
     "declarationMap": true,
+    "composite": true,
     "strict": true,
     "rootDir": "src",
     "outDir": "dist",

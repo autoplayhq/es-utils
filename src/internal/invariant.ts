@@ -137,7 +137,7 @@ export function invariantT(
  */
 export function invariantUnreachable(
   x: never,
-  message: AllowedMessageTypes
+  message?: AllowedMessageTypes
 ): never {
   invariantThrow(
     "invariantUnreachable encountered value which was supposed to be never" +
