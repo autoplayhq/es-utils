@@ -1,6 +1,5 @@
 import { DevString } from "./DevString";
 import { devStringify } from "./devStringify";
-import { t } from "./t";
 import { z } from "./z";
 
 type AllowedMessageTypes = DevString | string | number | object;
@@ -80,43 +79,10 @@ export function invariantEq(
         right,
         false
       )}` +
-        optionalMessageSuffix(message) +
-        (arguments.length > 3 ? `\nInstead found: ${devStringify(found)}` : ""),
+      optionalMessageSuffix(message) +
+      (arguments.length > 3 ? `\nInstead found: ${devStringify(found)}` : ""),
       found
     );
-}
-
-/** Asserts that the `value` conforms to the `codec` type */
-export function invariantT<T>(
-  value: unknown,
-  /** Pass a validation */
-  codec: t.Type<T>,
-  /** Pass a message or function producing a message */
-  message?: AllowedMessageTypes
-): asserts value is T;
-export function invariantT(
-  value: any,
-  /** Pass a validation */
-  codec: t.Type<any>,
-  /** Pass a message or function producing a message */
-  message?: AllowedMessageTypes
-) {
-  let decode = codec.decode(value);
-  if (decode._tag === "Left") {
-    console.error(
-      "Invariant failed to type check",
-      message,
-      "in",
-      value,
-      "with errors",
-      ...decode.left
-    );
-    throw new InvariantError(
-      `Invariant expected ${devStringify(value)} is ${devStringify(codec)}` +
-        optionalMessageSuffix(message),
-      value
-    );
-  }
 }
 
 /**
@@ -141,7 +107,7 @@ export function invariantUnreachable(
 ): never {
   invariantThrow(
     "invariantUnreachable encountered value which was supposed to be never" +
-      optionalMessageSuffix(message),
+    optionalMessageSuffix(message),
     x
   );
 }
