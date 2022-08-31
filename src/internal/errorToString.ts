@@ -1,14 +1,11 @@
-import { z } from "./z";
+import { z } from "./z/index";
 
 export function errorToString(err: z.ZodError | any) {
   if (err instanceof z.ZodError) {
     if (err.errors.length === 1) {
       const firstError = err.errors[0]!;
       if (firstError.code === z.ZodIssueCode.invalid_union) {
-        return (
-          "\nEvery choice of union failed:\n * " +
-          firstError.unionErrors.map((a) => a.toString()).join("\n * ")
-        );
+        return "\nEvery choice of union failed:\n * " + firstError.unionErrors.map((a) => a.toString()).join("\n * ");
       }
     }
 

@@ -1,6 +1,6 @@
 import { DevString } from "./DevString";
 import { devStringify } from "./devStringify";
-import { z } from "./z";
+import { z } from "./z/index";
 
 type AllowedMessageTypes = DevString | string | number | object;
 

@@ -1,5 +1,5 @@
-import * as z from "zod";
 import { choiceType, ZodChoice } from "./zchoice";
+import * as z from "zod";
 
 export type ZodOption<T> =
   | {
@@ -11,7 +11,7 @@ export type ZodOption<T> =
     };
 
 export function optionType<T extends z.ZodTypeAny>(
-  some: T
+  some: T,
 ): ZodChoice<{
   Some: T;
   None: true;

@@ -1,6 +1,6 @@
 // @ts-check
 /** @type {import("jest").Config} */
-module.exports = {
+export default {
   transform: {
     "^.+\\.(t|j)sx?$": "@swc/jest",
   },

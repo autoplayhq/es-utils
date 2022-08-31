@@ -10,9 +10,7 @@ export function devStringify(input: any, indentJSON: boolean = true): string {
   try {
     return typeof input === "string"
       ? input
-      : typeof input === "function" ||
-        input instanceof Error ||
-        input instanceof DevString
+      : typeof input === "function" || input instanceof Error || input instanceof DevString
       ? input.toString()
       : indentJSON
       ? tightJsonStringify(input)

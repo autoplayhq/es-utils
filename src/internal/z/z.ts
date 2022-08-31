@@ -1,17 +1,12 @@
-export * from "zod";
-import * as z from "zod";
 import { staticCheck } from "../staticCheck";
+import * as z from "zod";
+
+export * from "zod";
 
 // Custom Zod types
 export { ZodChoice, choiceType as choice } from "./zchoice";
-export {
-  ZodChoiceContainer,
-  ZodChoiceVariantsToValue,
-  ZodChoiceFactory,
-  inferChoiceContainer,
-} from "./zchoice";
-export { optionType as option } from "./zoption";
-export { ZodOption } from "./zoption";
+export { ZodChoiceContainer, ZodChoiceVariantsToValue, ZodChoiceFactory, inferChoiceContainer } from "./zchoice";
+export { optionType as option, ZodOption } from "./zoption";
 
 export const obj: typeof z.object = z.object.bind(z);
 
@@ -31,9 +26,7 @@ export function unchecked<T>() {
  * @param items multiple args; one or more zod types
  * @returns
  */
-export function or<T extends Array<z.ZodTypeAny>>(
-  ...items: T
-): z.ZodType<T[number]["_type"]> {
+export function or<T extends Array<z.ZodTypeAny>>(...items: T): z.ZodType<T[number]["_type"]> {
   if (items.length > 1) return z.union([items[0], items[1], ...items.slice(2)]);
   else return items[0];
 }
