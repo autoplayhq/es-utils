@@ -1,21 +1,45 @@
 import { DevString } from "./DevString";
 import { tightJsonStringify } from "./tightJsonStringify";
+import { quotelessJson } from "zod";
 
 /**
  * Stringifies any value given. If an object is given and `indentJSON` is true,
  * then a developer-readable, command line friendly (not too spaced out, but with
  * enough whitespace to be readable).
  */
-export function devStringify(input: any, indentJSON: boolean = true): string {
+export function devStringify(input: any, display: boolean = true): string {
   try {
-    return typeof input === "string"
-      ? input
-      : typeof input === "function" || input instanceof Error || input instanceof DevString
-      ? input.toString()
-      : indentJSON
-      ? tightJsonStringify(input)
-      : JSON.stringify(input);
+    if (typeof input === "string") {
+      return input;
+    } else if (typeof input === "function" || input instanceof Error) {
+      return input.toString();
+    } else {
+      const json = tightJsonStringify(input, (key, value) => {
+        if (value.toJSON === undefined) {
+          if (value instanceof Error) {
+            return {
+              // // @ts-ignore
+              // cause: value.cause ?? null,
+              error: value.toString(),
+              stack: value.stack ?? null,
+            };
+          }
+        }
+
+        return value;
+      });
+      return display ? cleanNewlinesAndStacks(json.replace(/"([^"]+)":/g, "$1:")) : json;
+    }
   } catch (err) {
     return input?.name || String(input);
   }
+}
+
+function cleanNewlinesAndStacks(stack: string): string {
+  // return stack;
+  return stack
+    .replace(/\(\/[^\)]+node_modules\//g, "(node_modules/")
+    .replace(/(.+?)"(.*\\n(.(?!\\"))+|\\")*"/gm, (_fullMatch, beforeQuote, inside) => {
+      return beforeQuote + `"` + inside.split(/\\n/g).join("\n" + " ".repeat(beforeQuote.length)) + '"';
+    });
 }

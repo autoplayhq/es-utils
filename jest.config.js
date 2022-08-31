@@ -4,4 +4,7 @@ export default {
   transform: {
     "^.+\\.(t|j)sx?$": "@swc/jest",
   },
+  snapshotFormat: {
+    escapeString: false
+  }
 };
