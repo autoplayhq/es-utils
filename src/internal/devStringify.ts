@@ -10,6 +10,13 @@ import { quotelessJson } from "zod";
 export function devStringify(input: any, display: boolean = true): string {
   try {
     if (typeof input === "string") {
+      if (input[0] === "{" || input[0] === "[") {
+        try {
+          return devStringify(JSON.parse(input), display);
+        } catch {
+          // I guess it wasn't JSON. No biggie!
+        }
+      }
       return input;
     } else if (typeof input === "function" || input instanceof Error) {
       return input.toString();

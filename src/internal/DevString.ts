@@ -52,7 +52,7 @@ export class DevString {
 
   // Notice that `"" + {toString() { return 1}} === "1"`
   toDisplay() {
-    const stringSubs = this._subs.map((sub) => devStringify(sub, false));
+    const stringSubs = this._subs.map((sub) => devStringify(sub, true));
     return typeof this._templateOrID === "number"
       ? `#${this._templateOrID}: ${stringSubs.join("; ")}` // if dev calls are replaced with message identifiers (this is speculative)
       : String.raw(this._templateOrID as TemplateStringsArray, stringSubs);
