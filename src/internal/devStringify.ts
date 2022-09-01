@@ -45,7 +45,9 @@ export function devStringify(input: any, display: boolean = true): string {
 function cleanNewlinesAndStacks(stack: string): string {
   // return stack;
   return stack
-    .replace(/\(\/[^\)]+node_modules\//g, "(node_modules/")
+    // replace private paths before node_modules
+    .replace(/(\(|\sat )\/[^\)\s]+node_modules\//gm, "$1node_modules/")
+    // replace escaped newlines in strings
     .replace(/(.+?)"(.*\\n(.(?!\\"))+|\\")*"/gm, (_fullMatch, beforeQuote, inside) => {
       return beforeQuote + `"` + inside.split(/\\n/g).join("\n" + " ".repeat(beforeQuote.length)) + '"';
     });
