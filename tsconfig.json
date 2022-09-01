@@ -8,11 +8,9 @@
     "declarationMap": true,
     "composite": true,
     "strict": true,
+    "exactOptionalPropertyTypes": true,
     "rootDir": "src",
-    "outDir": "dist",
-    "types": [
-      "node"
-    ]
+    "outDir": "dist"
   },
   "references": [],
   "include": [

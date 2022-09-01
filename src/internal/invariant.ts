@@ -14,7 +14,7 @@ type AllowedMessageTypes = DevString | string | number | object;
 export function invariant(
   shouldBeTruthy: any,
   message: (() => AllowedMessageTypes) | AllowedMessageTypes,
-  butFoundInstead?: any
+  butFoundInstead?: any,
 ): asserts shouldBeTruthy {
   if (!shouldBeTruthy) {
     const isFoundArgGiven = arguments.length > 2;
@@ -34,27 +34,19 @@ export function invariant(
  */
 export function invariantThrow(
   message: (() => AllowedMessageTypes) | AllowedMessageTypes,
-  butFoundInstead?: any
+  butFoundInstead?: any,
 ): never {
   const isFoundArgGiven = arguments.length > 1;
-  const prefix = devStringify(
-    typeof message === "function" ? message() : message
-  );
-  const suffix = isFoundArgGiven
-    ? `\nInstead found: ${devStringify(butFoundInstead)}`
-    : "";
+  const prefix = devStringify(typeof message === "function" ? message() : message);
+  const suffix = isFoundArgGiven ? `\nInstead found: ${devStringify(butFoundInstead)}` : "";
   throw new InvariantError(`Invariant: ${prefix}${suffix}`, butFoundInstead);
 }
 
 /** Used with our (Autoplay) custom ZodChoice */
 export function invariantChoiceIs<
   TVariants extends Record<string, any>,
-  VariantName extends Extract<keyof TVariants, string>
->(
-  choice: z.ZodChoiceContainer<TVariants>,
-  key: VariantName,
-  name = "choice"
-): TVariants[VariantName] {
+  VariantName extends Extract<keyof TVariants, string>,
+>(choice: z.ZodChoiceContainer<TVariants>, key: VariantName, name = "choice"): TVariants[VariantName] {
   return choice.matchPartial({ [key]: identity } as Partial<any>, (other) => {
     invariantThrow(`Expected ${name} to be "${key}"`, other);
   });
@@ -71,17 +63,14 @@ export function invariantEq(
   right: any,
   /** Pass a message or function producing a message */
   message?: (() => AllowedMessageTypes) | AllowedMessageTypes,
-  found?: any
+  found?: any,
 ) {
   if (left !== right)
     throw new InvariantError(
-      `Invariant expected ${devStringify(left, false)} = ${devStringify(
-        right,
-        false
-      )}` +
-      optionalMessageSuffix(message) +
-      (arguments.length > 3 ? `\nInstead found: ${devStringify(found)}` : ""),
-      found
+      `Invariant expected ${devStringify(left, false)} = ${devStringify(right, false)}` +
+        optionalMessageSuffix(message) +
+        (arguments.length > 3 ? `\nInstead found: ${devStringify(found)}` : ""),
+      found,
     );
 }
 
@@ -101,21 +90,15 @@ export function invariantEq(
  * }
  * ```
  */
-export function invariantUnreachable(
-  x: never,
-  message?: AllowedMessageTypes
-): never {
+export function invariantUnreachable(x: never, message?: AllowedMessageTypes): never {
   invariantThrow(
-    "invariantUnreachable encountered value which was supposed to be never" +
-    optionalMessageSuffix(message),
-    x
+    "invariantUnreachable encountered value which was supposed to be never" + optionalMessageSuffix(message),
+    x,
   );
 }
 
 function optionalMessageSuffix(message?: AllowedMessageTypes): string {
-  return message
-    ? " in " + devStringify(typeof message === "function" ? message() : message)
-    : "";
+  return message ? " in " + devStringify(typeof message === "function" ? message() : message) : "";
 }
 
 // regexes to remove lines from thrown error stacktraces
@@ -125,8 +108,7 @@ const AT_INVARIANT_RE = /^\s*(at|[^@]+@) (?:Object\.)?invariant.+/gm;
 const AT_INVARIANT_MORE_RE = /^\s*at.+invariant.+/gm;
 const AT_TEST_HELPERS_RE = /^\s*(at|[^@]+@).+test\-helpers.+/gm;
 // const AT_WEB_MODULES = /^\s*(at|[^@]+@).+(web_modules|\-[a-f0-9]{8}\.js).*/gm
-const AT_ASSORTED_HELPERS_RE =
-  /^\s*(at|[^@]+@).+(debounce|invariant|iif)\.[tj]s.*/gm;
+const AT_ASSORTED_HELPERS_RE = /^\s*(at|[^@]+@).+(debounce|invariant|iif)\.[tj]s.*/gm;
 
 /**
  * `InvariantError` removes lines from the `Error.stack` stack trace string
@@ -141,13 +123,15 @@ class InvariantError extends Error {
     }
     // const before = this.stack
     // prettier-ignore
-    this.stack = this.stack
-      ?.replace(AT_INVARIANT_RE, "")
-      .replace(AT_INVARIANT_MORE_RE, "")
-      .replace(AT_TYPES_INTERNAL_RE, "")
-      .replace(AT_ASSORTED_HELPERS_RE, "")
-      .replace(AT_TEST_HELPERS_RE, "")
-      .replace(AT_NODE_INTERNAL_RE, "")
-    // console.error({ before, after: this.stack })
+    if (this.stack) {
+      this.stack = this.stack
+        .replace(AT_INVARIANT_RE, "")
+        .replace(AT_INVARIANT_MORE_RE, "")
+        .replace(AT_TYPES_INTERNAL_RE, "")
+        .replace(AT_ASSORTED_HELPERS_RE, "")
+        .replace(AT_TEST_HELPERS_RE, "")
+        .replace(AT_NODE_INTERNAL_RE, "")
+        // console.error({ before, after: this.stack })
+    }
   }
 }

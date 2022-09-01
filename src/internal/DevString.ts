@@ -15,7 +15,7 @@ export class DevString {
   constructor(
     public readonly _templateOrID: TemplateStringsArray | number,
     public readonly _subs: any[],
-    public _values: undefined | { cause?: DevString | DevString[]; records?: Record<string, unknown> } = undefined,
+    public _values: undefined | { cause?: DevString | DevString[] | undefined; records?: Record<string, unknown> } = undefined,
   ) {}
 
   /** for double clicking in  */
