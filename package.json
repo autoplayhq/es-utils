@@ -10,7 +10,8 @@
     "build": "tsc --build .",
     "clean": "tsc --build . --clean && rimraf dist",
     "test": "jest",
-    "prepare": "npm run clean && npm run build"
+    "prepare": "npm run clean && npm run build",
+    "prepack": "npm run prepare"
   },
   "files": [
     "dist/*",
