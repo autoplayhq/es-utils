@@ -2,6 +2,7 @@
 export * from "./internal/invariant";
 export * from "./internal/devStringify";
 export * from "./internal/DevString";
+export * from "./internal/UsrString";
 export * from "./internal/tightJsonStringify";
 export * from "./internal/tightObjectDebug";
 export * from "./internal/staticCheck";
