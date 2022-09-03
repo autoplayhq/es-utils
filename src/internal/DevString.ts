@@ -15,7 +15,9 @@ export class DevString {
   constructor(
     public readonly _templateOrID: TemplateStringsArray | number,
     public readonly _subs: any[],
-    public _values: undefined | { cause?: DevString | DevString[] | undefined; records?: Record<string, unknown> } = undefined,
+    public _values:
+      | undefined
+      | { cause?: DevString | DevString[] | undefined; records?: Record<string, unknown> } = undefined,
   ) {}
 
   /** for double clicking in  */
@@ -53,17 +55,24 @@ export class DevString {
   // Notice that `"" + {toString() { return 1}} === "1"`
   toDisplay() {
     const stringSubs = this._subs.map((sub) => devStringify(sub, true));
-    return typeof this._templateOrID === "number"
-      ? `#${this._templateOrID}: ${stringSubs.join("; ")}` // if dev calls are replaced with message identifiers (this is speculative)
-      : String.raw(this._templateOrID as TemplateStringsArray, stringSubs);
+    let display =
+      typeof this._templateOrID === "number"
+        ? `#${this._templateOrID}: ${stringSubs.join("; ")}` // if dev calls are replaced with message identifiers (this is speculative)
+        : String.raw(this._templateOrID as TemplateStringsArray, stringSubs);
+    if (this._values) {
+      if (this._values.cause) {
+        display += "\n  because: " + devStringify(this._values.cause);
+      }
+      if (this._values.records) {
+        display += "\n  records: " + devStringify(this._values.records);
+      }
+    }
+    return display;
   }
 
   // Notice that `"" + {toString() { return 1}} === "1"`
   toString() {
-    const stringSubs = this._subs.map((sub) => devStringify(sub));
-    return typeof this._templateOrID === "number"
-      ? `#${this._templateOrID}: ${stringSubs.join("; ")}` // if dev calls are replaced with message identifiers (this is speculative)
-      : String.raw(this._templateOrID as TemplateStringsArray, stringSubs);
+    return this.toDisplay();
   }
 
   toJSON(key?: string) {
