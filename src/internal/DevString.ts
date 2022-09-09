@@ -1,4 +1,5 @@
 import { devStringify } from "./devStringify";
+import { invariantThrow } from "./invariant";
 
 /**
  * Future: maybe replaceable during build to create smaller packages.
@@ -52,13 +53,18 @@ export class DevString {
     });
   }
 
+  /** experimental: Throw a new error with this dev string as the display */
+  invariantThrow(): never {
+    invariantThrow(this);
+  }
+
   // Notice that `"" + {toString() { return 1}} === "1"`
   toDisplay() {
     const stringSubs = this._subs.map((sub) => devStringify(sub, true));
     let display =
       typeof this._templateOrID === "number"
         ? `#${this._templateOrID}: ${stringSubs.join("; ")}` // if dev calls are replaced with message identifiers (this is speculative)
-        : String.raw(this._templateOrID as TemplateStringsArray, stringSubs);
+        : String.raw(this._templateOrID as TemplateStringsArray, ...stringSubs);
     if (this._values) {
       if (this._values.cause) {
         display += "\n  because: " + devStringify(this._values.cause);

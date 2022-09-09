@@ -1,3 +1,4 @@
+import { DevString } from "./DevString";
 import { tightJsonStringify } from "./tightJsonStringify";
 
 /**
@@ -16,6 +17,8 @@ export function devStringify(input: any, display: boolean = true): string {
         }
       }
       return input;
+    } else if (display && input instanceof DevString) {
+      return input.toDisplay();
     } else if (typeof input === "function" || input instanceof Error) {
       return input.toString();
     } else {
@@ -42,11 +45,13 @@ export function devStringify(input: any, display: boolean = true): string {
 
 function cleanNewlinesAndStacks(stack: string): string {
   // return stack;
-  return stack
-    // replace private paths before node_modules
-    .replace(/(\(|\sat )\/[^\)\s]+node_modules\//gm, "$1node_modules/")
-    // replace escaped newlines in strings
-    .replace(/(.+?)"(.*\\n(.(?!\\"))+|\\")*"/gm, (_fullMatch, beforeQuote, inside) => {
-      return beforeQuote + `"` + inside.split(/\\n/g).join("\n" + " ".repeat(beforeQuote.length)) + '"';
-    });
+  return (
+    stack
+      // replace private paths before node_modules
+      .replace(/(\(|\sat )\/[^\)\s]+node_modules\//gm, "$1node_modules/")
+      // replace escaped newlines in strings
+      .replace(/(.+?)"(.*\\n(.(?!\\"))+|\\")*"/gm, (_fullMatch, beforeQuote, inside) => {
+        return beforeQuote + `"` + inside.split(/\\n/g).join("\n" + " ".repeat(beforeQuote.length)) + '"';
+      })
+  );
 }
