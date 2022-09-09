@@ -1,3 +1,4 @@
+import { DevError } from "./DevError";
 import { devStringify } from "./devStringify";
 import { invariantThrow } from "./invariant";
 
@@ -53,9 +54,8 @@ export class DevString {
     });
   }
 
-  /** experimental: Throw a new error with this dev string as the display */
-  invariantThrow(): never {
-    invariantThrow(this);
+  asError(): DevError {
+    return new DevError(this.toDisplay());
   }
 
   // Notice that `"" + {toString() { return 1}} === "1"`

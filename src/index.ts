@@ -1,5 +1,6 @@
 // Invariant errors with stack trace fixing
 export * from "./internal/invariant";
+export * from "./internal/DevError";
 export * from "./internal/devStringify";
 export * from "./internal/DevString";
 export * from "./internal/match";
