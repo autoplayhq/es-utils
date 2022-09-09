@@ -1,6 +1,6 @@
 {
   "name": "@autoplay/utils",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Utilities designed for error management, parsing, and TypeScript domain modeling.",
   "keywords": [],
   "type": "module",

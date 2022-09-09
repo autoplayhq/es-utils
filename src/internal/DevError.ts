@@ -1,11 +1,11 @@
 // regexes to remove lines from thrown error stacktraces
 const AT_NODE_INTERNAL_RE = /^\s*at.+node:internal.+/gm;
 const AT_TYPES_INTERNAL_RE = /^\s*at.+\/types\/src\/.+/gm;
-const AT_INVARIANT_RE = /^\s*(at|[^@]+@) (?:Object\.)?invariant.+/gm;
+const AT_INVARIANT_RE = /^\s*(at|[^@]+@) (?:Object\.)?(?:invariant|asError).+/gm;
 const AT_INVARIANT_MORE_RE = /^\s*at.+invariant.+/gm;
 const AT_TEST_HELPERS_RE = /^\s*(at|[^@]+@).+test\-helpers.+/gm;
 // const AT_WEB_MODULES = /^\s*(at|[^@]+@).+(web_modules|\-[a-f0-9]{8}\.js).*/gm
-const AT_ASSORTED_HELPERS_RE = /^\s*(at|[^@]+@).+(debounce|invariant|iif)\.[tj]s.*/gm;
+const AT_ASSORTED_HELPERS_RE = /^\s*(at|[^@]+@).+(debounce|invariant|iife)\.[tj]s.*/gm;
 
 /**
  * `DevError` removes lines from the `Error.stack` stack trace string
