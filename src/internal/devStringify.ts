@@ -19,7 +19,7 @@ export function devStringify(input: any, display: boolean = true): string {
       return input;
     } else if (display && input instanceof DevString) {
       return input.toDisplay();
-    } else if (typeof input === "function" || input instanceof Error) {
+    } else if (typeof input === "function") {
       return input.toString();
     } else {
       const json = tightJsonStringify(input, (key, value) => {
