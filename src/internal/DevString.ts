@@ -37,10 +37,12 @@ export class DevString {
    * dev`failed token exchange with ${issuerURL}`.because(reason)
    * dev`Continue button to show`.because(reason)
    */
-  because(cause: DevString): DevString {
+  because(cause: DevString): DevString;
+  because(tmpl: TemplateStringsArray, ...substitutions: any[]): DevString;
+  because(cause: DevString | TemplateStringsArray, ...substitutions: any[]): DevString {
     return new DevString(this._templateOrID, this._subs, {
       ...this._values,
-      cause: add(this._values?.cause, cause),
+      cause: add(this._values?.cause, cause instanceof DevString ? cause : new DevString(cause, substitutions)),
     });
   }
 
