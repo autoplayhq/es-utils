@@ -2,7 +2,7 @@
 const AT_NODE_INTERNAL_RE = /^\s*at.+node:internal.+/gm;
 const AT_TYPES_INTERNAL_RE = /^\s*at.+\/types\/src\/.+/gm;
 const AT_INVARIANT_RE = /^\s*(at|[^@]+@) (?:Object\.)?invariant.+/gm;
-const AT_INVARIANT_MORE_RE = /^\s*at.+(?:invariant|asError).+/gm;
+const AT_INVARIANT_MORE_RE = /^\s*at.+(?:invariant|asError|createErrorObj).+/gm;
 const AT_TEST_HELPERS_RE = /^\s*(at|[^@]+@).+test\-helpers.+/gm;
 // const AT_WEB_MODULES = /^\s*(at|[^@]+@).+(web_modules|\-[a-f0-9]{8}\.js).*/gm
 const AT_ASSORTED_HELPERS_RE = /^\s*(at|[^@]+@).+(debounce|invariant|iife)\.[tj]s.*/gm;
@@ -13,6 +13,8 @@ const AT_ASSORTED_HELPERS_RE = /^\s*(at|[^@]+@).+(debounce|invariant|iife)\.[tj]
  */
 export class DevError extends Error {
   found: any;
+  records: any;
+  cause: any;
   constructor(message: string) {
     super(message);
     // const before = this.stack
@@ -27,5 +29,15 @@ export class DevError extends Error {
         .replace(AT_NODE_INTERNAL_RE, "");
       // console.error({ before, after: this.stack })
     }
+  }
+
+  toJSON() {
+    return {
+      message: this.message,
+      found: this.found,
+      cause: this.cause,
+      records: this.records,
+      stack: this.stack,
+    };
   }
 }

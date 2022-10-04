@@ -36,7 +36,7 @@ export function devStringify(input: any, display: boolean = true): string {
 
         return value;
       });
-      return display ? cleanNewlinesAndStacks(json.replace(/"([^"]+)":/g, "$1:")) : json;
+      return display ? cleanNewlinesAndStacks(json.replace(/\\?"([^"]+)\\?":/g, "$1:")) : json;
     }
   } catch (err) {
     return input?.name || String(input);
@@ -51,7 +51,7 @@ function cleanNewlinesAndStacks(stack: string): string {
       .replace(/(\(|\sat )\/[^\)\s]+node_modules\//gm, "$1node_modules/")
       // replace escaped newlines in strings
       .replace(/(.+?)"(.*\\n(.(?!\\"))+|\\")*"/gm, (_fullMatch, beforeQuote, inside) => {
-        return beforeQuote + `"` + inside.split(/\\n/g).join("\n" + " ".repeat(beforeQuote.length)) + '"';
+        return beforeQuote + (inside ? `"${inside.split(/\\n/g).join("\n" + " ".repeat(beforeQuote.length))}"` : '""');
       })
   );
 }

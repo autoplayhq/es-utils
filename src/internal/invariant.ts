@@ -1,7 +1,6 @@
 import { DevError } from "./DevError";
-import { DevString } from "./DevString";
+import type { DevString } from "./DevString";
 import { devStringify } from "./devStringify";
-import { z } from "./z/index";
 
 type AllowedMessageTypes = DevString | string | number | object;
 
@@ -43,17 +42,7 @@ export function invariantThrow(
   throw new InvariantError(`Invariant: ${prefix}${suffix}`, butFoundInstead);
 }
 
-/** Used with our (Autoplay) custom ZodChoice */
-export function invariantChoiceIs<
-  TVariants extends Record<string, any>,
-  VariantName extends Extract<keyof TVariants, string>,
->(choice: z.ZodChoiceContainer<TVariants>, key: VariantName, name = "choice"): TVariants[VariantName] {
-  return choice.matchPartial({ [key]: identity } as Partial<any>, (other) => {
-    invariantThrow(`Expected ${name} to be "${key}"`, other);
-  });
-}
-
-function identity<T>(x: T): T {
+export function identity<T>(x: T): T {
   return x;
 }
 
@@ -107,7 +96,6 @@ function optionalMessageSuffix(message?: AllowedMessageTypes): string {
  * which cleans up the stack trace, making it more developer friendly to read.
  */
 class InvariantError extends DevError {
-  found: any;
   constructor(message: string, found?: any) {
     super(message);
     if (found !== undefined) {

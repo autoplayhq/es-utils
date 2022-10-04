@@ -1,6 +1,5 @@
 import { DevError } from "./DevError";
 import { devStringify } from "./devStringify";
-import { invariantThrow } from "./invariant";
 
 /**
  * Future: maybe replaceable during build to create smaller packages.
@@ -57,16 +56,24 @@ export class DevString {
   }
 
   asError(): DevError {
-    return new DevError(this.toDisplay());
+    const err = new DevError(this._templateDisplay());
+    if (this._values) {
+      err.cause = this._values.cause
+      err.records = this._values.records
+    }
+    return err
+  }
+
+  private _templateDisplay(): string {
+    const stringSubs = this._subs.map((sub) => devStringify(sub, true));
+    return typeof this._templateOrID === "number"
+    ? `#${this._templateOrID}: ${stringSubs.join("; ")}` // if dev calls are replaced with message identifiers (this is speculative)
+    : String.raw(this._templateOrID as TemplateStringsArray, ...stringSubs);
   }
 
   // Notice that `"" + {toString() { return 1}} === "1"`
   toDisplay() {
-    const stringSubs = this._subs.map((sub) => devStringify(sub, true));
-    let display =
-      typeof this._templateOrID === "number"
-        ? `#${this._templateOrID}: ${stringSubs.join("; ")}` // if dev calls are replaced with message identifiers (this is speculative)
-        : String.raw(this._templateOrID as TemplateStringsArray, ...stringSubs);
+    let display = this._templateDisplay()
     if (this._values) {
       if (this._values.cause) {
         display += "\n  because: " + devStringify(this._values.cause);
@@ -83,7 +90,7 @@ export class DevString {
     return this.toDisplay();
   }
 
-  toJSON(key?: string) {
+  toJSON() {
     return typeof this._templateOrID === "number"
       ? this._values == null
         ? [this._templateOrID, ...this._subs]

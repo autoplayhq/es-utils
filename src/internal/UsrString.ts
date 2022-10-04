@@ -1,6 +1,6 @@
 /** Strings you're willing to send to the user with minor formatting capabilities. */
 export class UsrString {
-  constructor(public readonly _marks: UsrMarkKind[], public readonly _children: UsrStringChild[]) {}
+  constructor(public readonly marks: UsrMarkKind[], public readonly children: UsrStringChild[]) {}
   toString(): string {
     return this.toPlainText();
   }
@@ -8,23 +8,23 @@ export class UsrString {
     return this._flattenedMd().join("");
   }
   toPlainText(): string {
-    let disp = this._children.map((c) => c.toString()).filter(Boolean);
-    for (const m of this._marks) {
-      if (typeof m === "object") {
-        disp = [...disp, " (", m.link, ")"];
+    let disp = this.children.map((c) => c.toString()).filter(Boolean);
+    for (const m of this.marks) {
+      if (m.type === "link") {
+        disp = [...disp, " (", m.link.href, ")"];
       }
     }
     return disp.join("");
   }
   toJSON(key?: unknown): unknown {
-    return this._flattenedMd()
+    return this._flattenedMd();
   }
   private _flattenedMd(): (string | number)[] {
-    let disp = this._children.flatMap((c) => c instanceof UsrString ? c._flattenedMd() : [c]).filter(Boolean);
-    for (const m of this._marks) {
-      if (m === "bold") disp = ["**", ...disp, "**"];
-      else if (m === "em") disp = ["*", ...disp, "*"];
-      else disp = ["[", ...disp, "](", m.link, ")"];
+    let disp = this.children.flatMap((c) => (c instanceof UsrString ? c._flattenedMd() : [c])).filter(Boolean);
+    for (const m of this.marks) {
+      if (m.type === "bold") disp = ["**", ...disp, "**"];
+      else if (m.type === "em") disp = ["*", ...disp, "*"];
+      else disp = ["[", ...disp, "](", m.link.href, ")"];
     }
     return disp;
   }
@@ -33,25 +33,30 @@ export class UsrString {
 const text = _usr.bind(null, []);
 export const usr: UsrConstructor = Object.assign(text, {
   text,
-  em: _usr.bind(null, ["em"]),
-  bold: _usr.bind(null, ["bold"]),
-  link: (displayText: UsrStringChild, href: string) => _usr([{ link: href.toString() }], displayText),
+  em: _usr.bind(null, [{ type: "em" }]),
+  bold: _usr.bind(null, [{ type: "bold" }]),
+  link: (displayText: UsrStringChild, href: string | URL) =>
+    _usr([{ type: "link", link: { href: href.toString() } }], displayText),
 });
 
 type UsrMarkKind =
-  | "bold"
-  | "em"
+  | { type: "bold" }
+  | { type: "em" }
   | {
-      link: string;
+      type: "link";
+      link: {
+        href: string;
+      };
     };
+
 type UsrStringChild = string | number | UsrString;
 function _usr(
-  _marks: UsrMarkKind[],
+  marks: UsrMarkKind[],
   template: TemplateStringsArray | UsrStringChild,
   ...elements: UsrStringChild[]
 ): UsrString {
   return new UsrString(
-    _marks,
+    marks,
     Array.isArray(template) ? template.flatMap((a, i) => (i < elements.length ? [a, elements[i]] : [a])) : [template],
   );
 }
@@ -63,5 +68,5 @@ interface UsrConstructor extends UsrFn {
   text: UsrFn;
   em: UsrFn;
   bold: UsrFn;
-  link(displayText: UsrStringChild, href: string | URL): UsrString
+  link(displayText: UsrStringChild, href: string | URL): UsrString;
 }

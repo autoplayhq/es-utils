@@ -1,4 +1,4 @@
-import { z } from "./z/index";
+import { z } from "./index";
 
 export function errorToString(err: z.ZodError | any) {
   if (err instanceof z.ZodError) {
