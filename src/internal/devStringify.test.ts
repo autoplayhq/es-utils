@@ -1,5 +1,6 @@
 import { dev } from "./DevString";
 import { devStringify } from "./devStringify";
+import { tightJsonStringify } from "./tightJsonStringify";
 import { describe, expect, it, jest } from "@jest/globals";
 
 describe("tightJsonStringify", () => {
@@ -19,12 +20,11 @@ describe("tightJsonStringify", () => {
     )}. This might have been caused by ${new URL("https://example.com")}`;
 
     expectStringWithPaths(devStringify(reason)).toMatchInlineSnapshot(`
-      "[ "Error resulting from ",
-        { error: "TypeError: Unknown type\\"
-                 \\"",
-          stack: "TypeError: Unknown type\\"
+      "Error resulting from { error: "TypeError: Unknown type\\"
+               \\"",
+        stack: "TypeError: Unknown type\\"
                  \\"
-                     at Object.<anonymous> (🙈/src/internal/devStringify.test.ts:17:45)
+                     at Object.<anonymous> (🙈/src/internal/devStringify.test.ts:18:47)
                      at Promise.then.completed (node_modules/jest-circus/build/utils.js:333:28)
                      at new Promise (<anonymous>)
                      at callAsyncCircusFn (node_modules/jest-circus/build/utils.js:259:10)
@@ -33,30 +33,36 @@ describe("tightJsonStringify", () => {
                      at _runTest (node_modules/jest-circus/build/run.js:209:3)
                      at _runTestsForDescribeBlock (node_modules/jest-circus/build/run.js:97:9)
                      at _runTestsForDescribeBlock (node_modules/jest-circus/build/run.js:91:9)
-                     at run (node_modules/jest-circus/build/run.js:31:3)" },
-        ". This might have been caused by ",
-        "https://example.com/" ]"
+                     at run (node_modules/jest-circus/build/run.js:31:3)" }. This might have been caused by "https://example.com/""
     `);
-    expectStringWithPaths(devStringify(reason.causedA`failed to log in`)).toMatchInlineSnapshot(`
+    const input = dev`the user saw an error`.because(reason);
+    expectStringWithPaths(
+      tightJsonStringify(input, (key, err) => (err instanceof Error ? { error: err.message, stack: err.stack } : err)),
+    ).toMatchInlineSnapshot(`
       "[ "the user saw an error",
-        { cause: [
+        { "cause": [
             "Error resulting from ",
-            { error: "TypeError: Unknown type\\"
-                     \\"",
-              stack: "TypeError: Unknown type\\"
-                     \\"
-                         at Object.<anonymous> (🙈/src/internal/devStringify.test.ts:17:45)
-                         at Promise.then.completed (node_modules/jest-circus/build/utils.js:333:28)
-                         at new Promise (<anonymous>)
-                         at callAsyncCircusFn (node_modules/jest-circus/build/utils.js:259:10)
-                         at _callCircusTest (node_modules/jest-circus/build/run.js:277:40)
-                         at processTicksAndRejections (node:internal/process/task_queues:95:5)
-                         at _runTest (node_modules/jest-circus/build/run.js:209:3)
-                         at _runTestsForDescribeBlock (node_modules/jest-circus/build/run.js:97:9)
-                         at _runTestsForDescribeBlock (node_modules/jest-circus/build/run.js:91:9)
-                         at run (node_modules/jest-circus/build/run.js:31:3)" },
+            { "error": "Unknown type\\"\\n\\"",
+              "stack": "TypeError: Unknown type\\"\\n\\"\\n    at Object.<anonymous> (🙈/src/internal/devStringify.test.ts:18:47)\\n    at Promise.then.completed (/Users/cole/autoplay/artprompt-app/node_modules/.pnpm/jest-circus@28.1.3/node_modules/jest-circus/build/utils.js:333:28)\\n    at new Promise (<anonymous>)\\n    at callAsyncCircusFn (/Users/cole/autoplay/artprompt-app/node_modules/.pnpm/jest-circus@28.1.3/node_modules/jest-circus/build/utils.js:259:10)\\n    at _callCircusTest (/Users/cole/autoplay/artprompt-app/node_modules/.pnpm/jest-circus@28.1.3/node_modules/jest-circus/build/run.js:277:40)\\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)\\n    at _runTest (/Users/cole/autoplay/artprompt-app/node_modules/.pnpm/jest-circus@28.1.3/node_modules/jest-circus/build/run.js:209:3)\\n    at _runTestsForDescribeBlock (/Users/cole/autoplay/artprompt-app/node_modules/.pnpm/jest-circus@28.1.3/node_modules/jest-circus/build/run.js:97:9)\\n    at _runTestsForDescribeBlock (/Users/cole/autoplay/artprompt-app/node_modules/.pnpm/jest-circus@28.1.3/node_modules/jest-circus/build/run.js:91:9)\\n    at run (/Users/cole/autoplay/artprompt-app/node_modules/.pnpm/jest-circus@28.1.3/node_modules/jest-circus/build/run.js:31:3)" },
             ". This might have been caused by ",
             "https://example.com/" ] } ]"
+    `);
+    expectStringWithPaths(input.toDisplay()).toMatchInlineSnapshot(`
+      "the user saw an error
+        because: Error resulting from { error: "TypeError: Unknown type\\"
+               \\"",
+        stack: "TypeError: Unknown type\\"
+                 \\"
+                     at Object.<anonymous> (🙈/src/internal/devStringify.test.ts:18:47)
+                     at Promise.then.completed (node_modules/jest-circus/build/utils.js:333:28)
+                     at new Promise (<anonymous>)
+                     at callAsyncCircusFn (node_modules/jest-circus/build/utils.js:259:10)
+                     at _callCircusTest (node_modules/jest-circus/build/run.js:277:40)
+                     at processTicksAndRejections (node:internal/process/task_queues:95:5)
+                     at _runTest (node_modules/jest-circus/build/run.js:209:3)
+                     at _runTestsForDescribeBlock (node_modules/jest-circus/build/run.js:97:9)
+                     at _runTestsForDescribeBlock (node_modules/jest-circus/build/run.js:91:9)
+                     at run (node_modules/jest-circus/build/run.js:31:3)" }. This might have been caused by "https://example.com/""
     `);
     // expect(devStringify(dev1)).toMatchInlineSnapshot();
   });

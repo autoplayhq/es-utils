@@ -36,7 +36,7 @@ export function devStringify(input: any, display: boolean = true): string {
 
         return value;
       });
-      return display ? cleanNewlinesAndStacks(json.replace(/\\?"([^"]+)\\?":/g, "$1:")) : json;
+      return display ? cleanNewlinesAndStacks(json.replace(/(\\?")([^"]+)\1:/g, "$2:")) : json;
     }
   } catch (err) {
     return input?.name || String(input);
@@ -50,8 +50,17 @@ function cleanNewlinesAndStacks(stack: string): string {
       // replace private paths before node_modules
       .replace(/(\(|\sat )\/[^\)\s]+node_modules\//gm, "$1node_modules/")
       // replace escaped newlines in strings
-      .replace(/(.+?)"(.*\\n(.(?!\\"))+|\\")*"/gm, (_fullMatch, beforeQuote, inside) => {
-        return beforeQuote + (inside ? `"${inside.split(/\\n/g).join("\n" + " ".repeat(beforeQuote.length))}"` : '""');
+      // .replace(/^(.+?)"(.*\\n(.(?!\\"))+|\\")*"$/gm, (_fullMatch, beforeQuote, inside) => {
+      .replace(/([^"]+?)"((?:\\.|[^\"])*)"/g, (_fullMatch, beforeQuote, inside: string | undefined) => {
+        return (
+          beforeQuote +
+          (inside
+            ? `"${inside
+                .split(/\\n/g)
+                // .map((line) => line.replace(/\\"/g, '"'))
+                .join("\n" + " ".repeat(beforeQuote.length))}"`
+            : '""')
+        );
       })
   );
 }

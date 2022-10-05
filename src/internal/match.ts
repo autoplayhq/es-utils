@@ -69,7 +69,7 @@ export function match<T extends object | undefined | null>(
         if (p === THEN) return undefined; // protect from Promise.resolve(...)
         if (p === EXH) return () => found;
         if (p === OTH) return found === empty ? (cb: (val: unknown) => unknown) => cb(value) : () => found;
-        if (found === empty && value && p in value) {
+        if (found === empty && value && p in (value as object)) {
           const inner = (value as $IntentionalAny)[p];
           return (cb: (inner: unknown) => unknown) => {
             found = cb(inner);
