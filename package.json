@@ -1,9 +1,10 @@
 {
   "name": "@autoplay/utils",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Utilities designed for error management, parsing, and TypeScript domain modeling.",
   "keywords": [],
-  "type": "module",
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
   "types": "esm/index.d.ts",
   "exports": {
     ".": {
@@ -19,15 +20,15 @@
   },
   "scripts": {
     "build": "tsc --build . && tsc --build tsconfig.cjs.json",
-    "clean": "tsc --build . --clean && rimraf cjs esm",
+    "clean": "rimraf *.tsbuildinfo cjs esm",
     "test": "jest",
     "prepare": "npm run clean && npm run build",
     "prepack": "npm run prepare"
   },
   "files": [
-    "esm/*",
-    "cjs/*",
-    "src/*"
+    "esm",
+    "cjs",
+    "src"
   ],
   "author": "Cole Lawrence <cole@colelawrence.com>",
   "repository": {
