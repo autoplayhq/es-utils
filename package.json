@@ -1,15 +1,22 @@
 {
   "name": "@autoplay/utils",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "Utilities designed for error management, parsing, and TypeScript domain modeling.",
   "keywords": [],
   "type": "module",
-  "exports": {
-    "default": "./esm/index.js",
-    "import": "./esm/index.js",
-    "require": "./cjs/index.js"
-  },
   "types": "esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./cjs/index.d.ts",
+        "default": "./cjs/index.js"
+      },
+      "require": {
+        "types": "./esm/index.d.ts",
+        "default": "./esm/index.js"
+      }
+    }
+  },
   "scripts": {
     "build": "tsc --build . && tsc --build tsconfig.cjs.json",
     "clean": "tsc --build . --clean && rimraf cjs esm",
