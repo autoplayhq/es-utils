@@ -1,6 +1,6 @@
-import type { DevString } from "./DevString";
-import { dev } from "./DevString";
-import type { ZodLikeParser } from "./ZodLikeParser";
+import type { DevString } from "./DevString.js";
+import { dev } from "./DevString.js";
+import type { ZodLikeParser } from "./ZodLikeParser.js";
 
 /**
  * Parse JSON into a runtime parseable (like with zod types)

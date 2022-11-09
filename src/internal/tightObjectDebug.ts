@@ -1,4 +1,4 @@
-import { tightJsonStringify } from "./tightJsonStringify";
+import { tightJsonStringify } from "./tightJsonStringify.js";
 
 export function tightObjectDebug(obj: any) {
   return tightJsonStringify(obj, (key, value) => {

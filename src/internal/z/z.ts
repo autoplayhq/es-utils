@@ -1,12 +1,12 @@
-import { staticCheck } from "../staticCheck";
+import { staticCheck } from "../staticCheck.js";
 import * as z from "zod";
 
 export * from "zod";
 
 // Custom Zod types
-export { ZodChoice, choiceType as choice } from "./zchoice";
-export { ZodChoiceContainer, ZodChoiceVariantsToValue, ZodChoiceFactory, inferChoiceContainer } from "./zchoice";
-export { optionType as option, ZodOption } from "./zoption";
+export { ZodChoice, choiceType as choice } from "./zchoice.js";
+export { ZodChoiceContainer, ZodChoiceVariantsToValue, ZodChoiceFactory, inferChoiceContainer } from "./zchoice.js";
+export { optionType as option, ZodOption } from "./zoption.js";
 
 export const obj: typeof z.object = z.object.bind(z);
 

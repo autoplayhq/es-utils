@@ -1,5 +1,5 @@
-import { DevString } from "./DevString";
-import { tightJsonStringify } from "./tightJsonStringify";
+import { DevString } from "./DevString.js";
+import { tightJsonStringify } from "./tightJsonStringify.js";
 
 /**
  * Stringifies any value given. If an object is given and `indentJSON` is true,

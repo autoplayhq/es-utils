@@ -1,4 +1,4 @@
-import { tightJsonStringify } from "./tightJsonStringify";
+import { tightJsonStringify } from "./tightJsonStringify.js";
 import { describe, expect, it } from "@jest/globals";
 
 describe("tightJsonStringify", () => {

@@ -1,6 +1,6 @@
-import { DevError } from "./DevError";
-import type { DevString } from "./DevString";
-import { devStringify } from "./devStringify";
+import { DevError } from "./DevError.js";
+import type { DevString } from "./DevString.js";
+import { devStringify } from "./devStringify.js";
 
 type AllowedMessageTypes = DevString | string | number | object;
 

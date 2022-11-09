@@ -1,4 +1,4 @@
-import { choiceType, ZodChoice } from "./zchoice";
+import { choiceType, ZodChoice } from "./zchoice.js";
 import * as z from "zod";
 
 export type ZodOption<T> =

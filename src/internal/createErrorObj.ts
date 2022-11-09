@@ -1,5 +1,5 @@
-import type { DevString } from "./DevString";
-import { dev } from "./DevString";
+import type { DevString } from "./DevString.js";
+import { dev } from "./DevString.js";
 
 /**
  * Generate a fragile object that will throw error at any operation.

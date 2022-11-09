@@ -1,5 +1,5 @@
-import { DevError } from "./DevError";
-import { devStringify } from "./devStringify";
+import { DevError } from "./DevError.js";
+import { devStringify } from "./devStringify.js";
 
 /**
  * Future: maybe replaceable during build to create smaller packages.
@@ -56,7 +56,7 @@ export class DevString {
   }
 
   asError(): DevError {
-    const err = new DevError(this._templateDisplay());
+    const err = new DevError(this.toDisplay());
     if (this._values) {
       err.cause = this._values.cause
       err.records = this._values.records

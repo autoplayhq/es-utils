@@ -1,17 +1,17 @@
 // Invariant errors with stack trace fixing
-export * from "./internal/invariant";
-export * from "./internal/DevError";
-export * from "./internal/devStringify";
-export * from "./internal/DevString";
-export * from "./internal/match";
-export * from "./internal/parseJSON";
-export * from "./internal/createErrorObj";
-export * from "./internal/staticCheck";
-export * from "./internal/tightJsonStringify";
-export * from "./internal/tightObjectDebug";
-export * from "./internal/UsrString";
+export * from "./internal/invariant.js";
+export * from "./internal/DevError.js";
+export * from "./internal/devStringify.js";
+export * from "./internal/DevString.js";
+export * from "./internal/match.js";
+export * from "./internal/parseJSON.js";
+export * from "./internal/createErrorObj.js";
+export * from "./internal/staticCheck.js";
+export * from "./internal/tightJsonStringify.js";
+export * from "./internal/tightObjectDebug.js";
+export * from "./internal/UsrString.js";
 // functional pipe used for many sdk builders
-export * from "./internal/pipe";
+export * from "./internal/pipe.js";
 // zod for runtime parsing for type validators (accepted and output cannot be different types)
 // This also includes ZodChoice type
-export * from "./internal/z/index";
+export * from "./internal/z/index.js";

@@ -1,5 +1,5 @@
-import type { z } from ".";
-import { identity, invariantThrow } from "../invariant";
+import type { z } from "./index.js";
+import { identity, invariantThrow } from "../invariant.js";
 
 /** Used with our (Autoplay) custom ZodChoice */
 

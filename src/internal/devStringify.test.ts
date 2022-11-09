@@ -1,7 +1,7 @@
-import { dev } from "./DevString";
-import { devStringify } from "./devStringify";
-import { tightJsonStringify } from "./tightJsonStringify";
-import { describe, expect, it, jest } from "@jest/globals";
+import { dev } from "./DevString.js";
+import { devStringify } from "./devStringify.js";
+import { tightJsonStringify } from "./tightJsonStringify.js";
+import { describe, expect, it } from "@jest/globals";
 
 describe("tightJsonStringify", () => {
   it("matches a series of expectations", () => {

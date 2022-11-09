@@ -1,5 +1,5 @@
-export * as z from "./z";
+export * as z from "./z.js";
 // Extra invariant assertion
-export * from "./invariantChoiceIs";
+export * from "./invariantChoiceIs.js";
 // Error stringification including Zod types
-export * from "./errorToString";
+export * from "./errorToString.js";

@@ -1,7 +1,8 @@
 .DS_Store
 Thumbs.db
 
-/dist
+/esm
+/cjs
 /index.*
 *.log
 *.tsbuildinfo
