@@ -21,5 +21,11 @@ describe("tightJsonStringify", () => {
             { "d": 4 } ],
           "e": 8 } }"
     `);
+    expect(
+      tightJsonStringify({
+        null: null,
+        undef: undefined,
+      }),
+    ).toMatchInlineSnapshot(`"{ "null": null }"`);
   });
 });

@@ -64,7 +64,15 @@ describe("tightJsonStringify", () => {
                      at _runTestsForDescribeBlock (node_modules/jest-circus/build/run.js:91:9)
                      at run (node_modules/jest-circus/build/run.js:31:3)" }. This might have been caused by "https://example.com/""
     `);
-    // expect(devStringify(dev1)).toMatchInlineSnapshot();
+    expect(
+      devStringify({
+        tr: true,
+        fa: false,
+        obj: JSON,
+        undef: undefined,
+        null: null,
+      }),
+    ).toMatchInlineSnapshot(`"[object Object]"`);
   });
 });
 

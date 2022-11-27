@@ -22,20 +22,23 @@ export function devStringify(input: any, display: boolean = true): string {
     } else if (typeof input === "function") {
       return input.toString();
     } else {
-      const json = tightJsonStringify(input, (key, value) => {
-        if (value.toJSON === undefined) {
-          if (value instanceof Error) {
-            return {
-              // // @ts-ignore
-              // cause: value.cause ?? null,
-              error: value.toString(),
-              stack: value.stack ?? null,
-            };
+      const replacer = (_key: string, value: any): any => {
+        try {
+          if (value && value.toJSON === undefined) {
+            if (value instanceof Error) {
+              return {
+                error: value.toString(),
+                stack: value.stack ?? null,
+                // @ts-ignore
+                cause: value.cause ? replacer("cause", value.cause) : undefined,
+              };
+            }
           }
-        }
+        } catch {}
 
         return value;
-      });
+      };
+      const json = tightJsonStringify(input, replacer);
       return display ? cleanNewlinesAndStacks(json.replace(/(\\?")([^"]+)\1:/g, "$2:")) : json;
     }
   } catch (err) {
