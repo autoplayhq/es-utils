@@ -1,9 +1,8 @@
 {
   "name": "@autoplay/utils",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "Utilities designed for error management, parsing, and TypeScript domain modeling.",
   "keywords": [],
-  "type": "module",
   "main": "cjs/index.js",
   "module": "esm/index.js",
   "types": "esm/index.d.ts",
